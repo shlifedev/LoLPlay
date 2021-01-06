@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using LoLPlay.Channels;
 using System;
@@ -21,18 +22,18 @@ namespace LoLPlay
         
         
         //클라이언트
-        private DiscordSocketClient _client;
+        public DiscordSocketClient Client;
         private CommandHandler _commandHandler;
         public ChannelManager ChannelManager;
 
         public async Task Run()
         {
            
-            _client = new DiscordSocketClient();
-            _client.Log += Log;
+            Client = new DiscordSocketClient();
+            Client.Log += Log;
 
             //클라이언트 커맨드 핸들러 초기화
-            _commandHandler = new CommandHandler(_client, new Discord.Commands.CommandService());
+            _commandHandler = new CommandHandler(Client, new Discord.Commands.CommandService());
             await _commandHandler.InstallCommandsAsync();
 
             //채널 매니저 초기화
@@ -45,16 +46,24 @@ namespace LoLPlay
 
 
             //봇 실행
-            await _client.LoginAsync(TokenType.Bot, token);
-            await _client.StartAsync(); 
-
-            //무한 반복
+            await Client.LoginAsync(TokenType.Bot, token);
+            await Client.StartAsync();
+       
+            Client.SetGameAsync("LoLPlay 관리");
+            while (true)
+            {
+                var data = Console.ReadLine();
+                if(data == "A")
+                { 
+                   
+                }
+            }
             await Task.Delay(-1);
         }
 
         public Task Log(LogMessage msg)
         {
-            Console.WriteLine(msg.ToString());
+            Console.WriteLine(msg.ToString()); 
             return Task.CompletedTask;
         }
     }

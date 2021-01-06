@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LoLPlay.Channels
 {
     public class PartyCreatedChannel : ChannelBase
     {
-        public override void OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
+        public override async Task OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
         {
 
         }

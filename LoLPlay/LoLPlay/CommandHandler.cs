@@ -49,13 +49,13 @@ public class CommandHandler
             var split = content.Split(' ');
 
             //인자가 있는 명령어
-            if(split.Length == 0)
+            if(split.Length != 0)
             {
                 var cmdExist = targetChannelObject.CommandExist(split[0]);
                 List<string> args = new List<string>(split);
                              args.RemoveAt(0);
                 if (cmdExist)
-                    targetChannelObject.OnReceivedMsg(message, split[0], args);
+                    await targetChannelObject.OnReceivedMsg(message, split[0], args);
             }
             //인자가 없는 명령어
             else
@@ -63,7 +63,7 @@ public class CommandHandler
                 var cmdExist = targetChannelObject.CommandExist(content);
 
                 if (cmdExist)
-                    targetChannelObject.OnReceivedMsg(message, content, null);
+                    await targetChannelObject.OnReceivedMsg(message, content, null);
             } 
       
         }

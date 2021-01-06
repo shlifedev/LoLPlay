@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LoLPlay.Channels
 {
     public class ChannelBase 
     { 
+        public SocketChannel SocketChannel => LoLPlayManager.Instance.Client.GetChannel(ID);
         public System.Collections.Generic.HashSet<string> commands = new HashSet<string>();
         public ulong ID;
 
 
-        public virtual void OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
+        public virtual async Task OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
         {
 
         }
