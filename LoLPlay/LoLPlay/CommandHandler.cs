@@ -40,7 +40,7 @@ public class CommandHandler
             return;
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("Command - " + messageParam.Content);
+        Console.WriteLine($"{messageParam.Channel.Id}");
         Console.ForegroundColor = ConsoleColor.White;
     }
 }

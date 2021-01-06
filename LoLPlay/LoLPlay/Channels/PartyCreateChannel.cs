@@ -6,6 +6,6 @@ namespace LoLPlay.Channels
 {
     public class PartyCreateChannel : ChannelBase
     {
-
+        
     }
 }
