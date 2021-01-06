@@ -1,0 +1,38 @@
+﻿using Discord.WebSocket;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LoLPlay.Channels
+{
+    public class ChannelBase 
+    { 
+        public System.Collections.Generic.HashSet<string> commands = new HashSet<string>();
+        public ulong ID;
+
+
+        public virtual void OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
+        {
+
+        }
+
+        public bool CommandExist(string command)
+        {
+            return commands.Contains(command);
+        }
+        public void AddCommand(string command)
+        {
+            commands.Add(command);
+            Console.ForegroundColor = ConsoleColor.Green;
+            LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "ChannelInstance", $"AddCommand - {command}"));
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public void Init(ulong channelId)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "ChannelInstance", $"Initalized Channel Instance - {this.GetType().Name}"));
+            Console.ForegroundColor = ConsoleColor.White;
+            this.ID = channelId;
+        }  
+    }
+}

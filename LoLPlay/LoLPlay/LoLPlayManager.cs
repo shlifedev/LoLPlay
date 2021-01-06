@@ -37,6 +37,7 @@ namespace LoLPlay
 
             //채널 매니저 초기화
             ChannelManager = new ChannelManager();
+            ChannelManager.AddChannel(796458488871387206, new PartyCreateChannel());
 
 
             //토큰 불러오기

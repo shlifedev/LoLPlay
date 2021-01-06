@@ -1,6 +1,8 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using LoLPlay.Channels;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -39,8 +41,31 @@ public class CommandHandler
                 message.Author.IsBot)
             return;
 
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"{messageParam.Channel.Id}");
-        Console.ForegroundColor = ConsoleColor.White;
+        var targetChannelObject = LoLPlay.LoLPlayManager.Instance.ChannelManager.GetChannel(messageParam.Channel.Id);
+
+        if(targetChannelObject != null)
+        {
+            var content = message.Content;
+            var split = content.Split(' ');
+
+            //인자가 있는 명령어
+            if(split.Length == 0)
+            {
+                var cmdExist = targetChannelObject.CommandExist(split[0]);
+                List<string> args = new List<string>(split);
+                             args.RemoveAt(0);
+                if (cmdExist)
+                    targetChannelObject.OnReceivedMsg(message, split[0], args);
+            }
+            //인자가 없는 명령어
+            else
+            {
+                var cmdExist = targetChannelObject.CommandExist(content);
+
+                if (cmdExist)
+                    targetChannelObject.OnReceivedMsg(message, content, null);
+            } 
+      
+        }
     }
 }
