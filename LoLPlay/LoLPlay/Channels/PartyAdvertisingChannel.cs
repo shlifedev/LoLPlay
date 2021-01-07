@@ -43,12 +43,12 @@ namespace LoLPlay.Channels
             
         }
 
-        public async Task OnApplicationQuitAsync(object sender, EventArgs e)
+        public async override Task OnApplicationQuitAsync(object sender, EventArgs e)
         {
             await LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "Quit", "파티홍보 채널 채팅기록 클리어중"));
            
         }
-        public void OnApplicationQuit(object sender, EventArgs e)
+        public override void OnApplicationQuit(object sender, EventArgs e)
         {
             OnApplicationQuitAsync(sender, e).Wait(); 
         } 

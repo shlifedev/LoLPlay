@@ -13,26 +13,23 @@ namespace LoLPlay.Channels
         CancellationTokenSource cts = new CancellationTokenSource();
         public PartyVoiceChannel()
         {
-          
+
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationQuit);
             LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "PartyVoice", "파티 보이스 채널 생성됨"));
-            LoLPlayManager.Instance.Client.ChannelDestroyed += ChannelDestroyed; 
+            LoLPlayManager.Instance.Client.ChannelDestroyed += ChannelDestroyed;
             _ = Task.Factory.StartNew(AutoChannelDelete, cts.Token);
         }
-        
+
         public async Task AutoChannelDelete()
         {
             //1분이후 인원이 0명인 서버인경우 삭제처리
             System.Threading.Thread.Sleep(60000);
-
-            foreach (var guild in LoLPlayManager.Instance.Client.Guilds)
+            var guild = LoLPlayManager.Instance.GetGuild();
+            foreach (var channel in guild.Channels)
             {
-                foreach (var channel in guild.Channels)
+                if (channel.Id == this.ID && channel.Users.Count == 0)
                 {
-                    if (channel.Id == this.ID && channel.Users.Count == 0)
-                    {
-                        await channel.DeleteAsync();
-                    }
+                    await channel.DeleteAsync();
                 }
             }
         }
@@ -40,30 +37,29 @@ namespace LoLPlay.Channels
         {
             cts.Cancel();
         }
-        public async Task OnApplicationQuitAsync(object sender, EventArgs e)
+        public async override Task OnApplicationQuitAsync(object sender, EventArgs e)
         {
             try
             {
                 await LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "Quit", "봇 종료전, 생성된 파티채널 삭제중입니다."));
-                foreach (var guild in LoLPlayManager.Instance.Client.Guilds)
+                var guild = LoLPlayManager.Instance.GetGuild();
+
+                foreach (var channel in guild.Channels)
                 {
-                    foreach (var channel in guild.Channels)
+                    if (channel.Id == this.ID)
                     {
-                        if (channel.Id == this.ID)
-                        {
-                            await channel.DeleteAsync();
-                        }
+                        await channel.DeleteAsync();
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await LoLPlayManager.Instance.LogError("PartyVoice", ex.Message);
             }
         }
-        public void OnApplicationQuit(object sender, EventArgs e)
+        public override void OnApplicationQuit(object sender, EventArgs e)
         {
-            OnApplicationQuitAsync(sender, e).Wait(); 
-        } 
+            OnApplicationQuitAsync(sender, e).Wait();
+        }
     }
 }

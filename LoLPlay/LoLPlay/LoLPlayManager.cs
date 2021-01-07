@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace LoLPlay
 {
+    /// <summary>
+    /// 롤 플레이 매니저, 서버 맞춤형으로 제작되었음
+    /// </summary>
     public class LoLPlayManager
     {
         public RiotApi riotAPI;
@@ -30,12 +33,24 @@ namespace LoLPlay
 
 
       
+        public SocketGuild GetGuild()
+        {
+           return LoLPlayManager.Instance.Client.GetGuild(GlobalConfig.DiscordServerID);
+        }
+
+
+        public async Task OnReady()
+        {
+            await TeamVsTeamManager.Instance.Initialize();
+        }
+
         public async Task Run()
         {
            
+         
             Client = new DiscordSocketClient();
             Client.Log += Log;
-
+            Client.Ready += OnReady;
             //클라이언트 커맨드 핸들러 초기화
             _commandHandler = new CommandHandler(Client, new Discord.Commands.CommandService());
             await _commandHandler.InstallCommandsAsync();
@@ -59,6 +74,8 @@ namespace LoLPlay
             await Client.StartAsync();
 
             await Client.SetGameAsync("LoLPlay 관리");  
+      
+            
             while (true)
             {
                 var data = Console.ReadLine();

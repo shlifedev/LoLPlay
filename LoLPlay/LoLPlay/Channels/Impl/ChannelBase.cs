@@ -18,6 +18,15 @@ namespace LoLPlay.Channels
 
         }
 
+        public virtual async Task OnApplicationQuitAsync(object sender, EventArgs e)
+        {
+             
+        }
+        public virtual void OnApplicationQuit(object sender, EventArgs e)
+        {
+           
+        }
+
         public bool CommandExist(string command)
         {
             return commands.Contains(command);

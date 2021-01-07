@@ -77,7 +77,7 @@ namespace LoLPlay.Channels
             }
         }
 
-        public async Task OnApplicationQuitAsync()
+        public async override Task OnApplicationQuitAsync(object sender, EventArgs e)
         {
             await LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "Quit", "봇 종료전, 생성된 봇 파티생성채팅 삭제중입니다."));
             foreach (var msg in partyCreateMsgs)
@@ -85,9 +85,9 @@ namespace LoLPlay.Channels
                 await msg.DeleteAsync(); 
             }
         }
-        public void OnApplicationQuit(object sender, EventArgs e)
+        public override void OnApplicationQuit(object sender, EventArgs e)
         {
-            OnApplicationQuitAsync().Wait();
+            OnApplicationQuitAsync(sender, e).Wait();
         }
         /// <summary>
         /// 파티음성채널 생성

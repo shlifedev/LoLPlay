@@ -12,18 +12,28 @@ namespace LoLPlay.Channels
 {
     public class LoLTierVerifyChannel : ChannelBase
     {
+        public LoLTierVerifyChannel()
+        {
+            AddCommand("!티어인증");
+            AppDomain.CurrentDomain.ProcessExit += OnApplicationQuit;
+        }
 
         public Dictionary<string, string> tierGroup = new Dictionary<string, string>()
         {
             { "bronze", "브론즈"},  { "silver", "실버"},  { "gold", "골드"},  { "platinum", "플레티넘"},  { "diamond", "다이아몬드" }, { "challenger", "첼린저" }, { "master", "마스터" }, { "grandmaster", "그랜드마스터"}
         };
         public List<string> tierList = new List<string>() { "브론즈", "실버", "골드", "플레티넘", "다이아몬드", "첼린저", "마스터", "그랜드마스터"};
-        public LoLTierVerifyChannel()
+       
+
+        public override void OnApplicationQuit(object sender, EventArgs e)
         {
-            AddCommand("!티어인증");
+            base.OnApplicationQuit(sender, e);
         }
 
-       
+        public override Task OnApplicationQuitAsync(object sender, EventArgs e)
+        {
+            return base.OnApplicationQuitAsync(sender, e);
+        }
 
         public override async Task OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
         {

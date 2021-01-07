@@ -14,27 +14,25 @@ namespace LoLPlay.Channels
     {
         public ServerStatusNotificationChannel()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationQuit); ;
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationQuit);
         }
 
-        public async Task OnApplicationQuitAsync()
+        public async override Task OnApplicationQuitAsync(object sender, EventArgs e)
         {
             await LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "Quit", "봇 종료전 ServerStatusNotificationChannel에 로그를 남깁니다."));
-            foreach (var guild in LoLPlayManager.Instance.Client.Guilds)
+            var guild = LoLPlayManager.Instance.GetGuild();
+            foreach (var channel in guild.Channels)
             {
-                foreach (var channel in guild.Channels)
+                if (channel.Id == this.ID)
                 {
-                    if (channel.Id == this.ID)
-                    {
-                        var socketTextChannel = channel as SocketTextChannel;
-                        await socketTextChannel.SendMessageAsync($"{System.DateTime.Now} - 봇 서버가 종료되었습니다.");
-                    }
+                    var socketTextChannel = channel as SocketTextChannel;
+                    await socketTextChannel.SendMessageAsync($"{System.DateTime.Now} - 봇 서버가 종료되었습니다.");
                 }
             }
         }
-        public void OnApplicationQuit(object sender, EventArgs e)
+        public override void OnApplicationQuit(object sender, EventArgs e)
         {
-            OnApplicationQuitAsync().Wait();
+            OnApplicationQuitAsync(sender, e).Wait();
         }
 
     }
