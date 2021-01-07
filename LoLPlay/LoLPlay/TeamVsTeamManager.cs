@@ -50,24 +50,29 @@ namespace LoLPlay
         }
 
 
+        public async Task AddChannel(string channelName)
+        {
+            AppDomain.CurrentDomain.ProcessExit += OnApplicationQuit;
+
+            var mainVoice = GetWaitRoomName(channelName);
+            var voice1Team = GetBlueTeamName(channelName);
+            var voice2Team = GetRedTeamName(channelName);
+
+            var createdChannelMainVoice = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(mainVoice, x => { x.UserLimit = 14; x.CategoryId = GlobalConfig.TeamVsChannelID; });
+            var createdChannelBlueTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice1Team, x => { x.UserLimit = 7; x.CategoryId = GlobalConfig.TeamVsChannelID; });
+            var createdChannelRedTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice2Team, x => { x.UserLimit = 7; x.CategoryId = GlobalConfig.TeamVsChannelID; });
+
+            //add
+            createdTvTChannels.Add(createdChannelRedTeam);
+            createdTvTChannels.Add(createdChannelBlueTeam);
+            createdTvTChannels.Add(createdChannelMainVoice);
+
+        }
         public async Task Initialize()
         {
             AppDomain.CurrentDomain.ProcessExit += OnApplicationQuit;
-            foreach(var channel in TvTChannels)
-            {
-                var mainVoice = GetWaitRoomName(channel);
-                var voice1Team = GetBlueTeamName(channel);
-                var voice2Team = GetRedTeamName(channel);
-
-                var createdChannelMainVoice = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(mainVoice, x => { x.UserLimit = 14; x.CategoryId = GlobalConfig.TeamVsChannelID; });
-                var createdChannelBlueTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice1Team, x => { x.UserLimit = 7; x.CategoryId = GlobalConfig.TeamVsChannelID; });
-                var createdChannelRedTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice2Team, x => { x.UserLimit = 7; x.CategoryId = GlobalConfig.TeamVsChannelID; });
-               
-                //add
-                createdTvTChannels.Add(createdChannelRedTeam);
-                createdTvTChannels.Add(createdChannelBlueTeam);
-                createdTvTChannels.Add(createdChannelMainVoice); 
-            }
+            foreach(var channel in TvTChannels) 
+                await AddChannel(channel); 
 
         }
 
