@@ -71,6 +71,8 @@ namespace LoLPlay.Channels
 
             var msg = await scc.Guild.GetTextChannel(ID).SendMessageAsync($"{receivedData.Author.Mention} 님의 {args[0]}파티가 생성되었어요! \n바로입장:{invite.Url}  (해당 메세지는 1분후 삭제됩니다) \n 파티인원 모집은 파티홍보채널에서 해주세요!");
             partyCreateMsgs.Add(msg);
+          
+            //60초후 메세지 삭제
             _ = Task.Factory.StartNew(() =>
               {
                   try
