@@ -1,0 +1,9 @@
+bin/
+obj/
+packages/
+TestResults/
+*.suo
+*.nupkg
+.vs/
+project.lock.json
+.vscode/

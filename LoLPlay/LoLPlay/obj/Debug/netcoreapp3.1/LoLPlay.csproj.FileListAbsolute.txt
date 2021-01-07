@@ -20,3 +20,5 @@ C:\Users\shlif\Documents\GitHub\LoLPlay\LoLPlay\LoLPlay\obj\Debug\netcoreapp3.1\
 C:\Users\shlif\Documents\GitHub\LoLPlay\LoLPlay\LoLPlay\obj\Debug\netcoreapp3.1\LoLPlay.dll
 C:\Users\shlif\Documents\GitHub\LoLPlay\LoLPlay\LoLPlay\obj\Debug\netcoreapp3.1\LoLPlay.pdb
 C:\Users\shlif\Documents\GitHub\LoLPlay\LoLPlay\LoLPlay\obj\Debug\netcoreapp3.1\LoLPlay.genruntimeconfig.cache
+C:\Users\shlif\Documents\GitHub\LoLPlay\LoLPlay\LoLPlay\bin\Debug\netcoreapp3.1\RiotSharp.dll
+C:\Users\shlif\Documents\GitHub\LoLPlay\LoLPlay\LoLPlay\bin\Debug\netcoreapp3.1\RiotSharp.pdb

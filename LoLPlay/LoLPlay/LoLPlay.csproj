@@ -9,4 +9,8 @@
     <PackageReference Include="Discord.Net" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RiotSharp-develop\RiotSharp\RiotSharp.csproj" />
+  </ItemGroup>
+
 </Project>

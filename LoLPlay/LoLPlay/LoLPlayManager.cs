@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using LoLPlay.Channels;
+using RiotSharp;
 using System;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace LoLPlay
 {
     public class LoLPlayManager
     {
+        public RiotApi riotAPI;
         public static LoLPlayManager Instance
         {
             get
@@ -42,16 +44,21 @@ namespace LoLPlay
             ChannelManager = new ChannelManager();
             ChannelManager.AddChannel(796524973744586753, new PartyCreateChannel());
             ChannelManager.AddChannel(796533464983404624, new ServerStatusNotificationChannel());
+            ChannelManager.AddChannel(796459008659685398, new PartyAdvertisingChannel());
+            ChannelManager.AddChannel(796554797930119199, new LoLTierVerifyChannel());
 
             //토큰 불러오기
             var token = System.IO.File.ReadAllText("token.txt");
+            //토큰 불러오기
+            var apikey = System.IO.File.ReadAllText("riot_apikey.txt");
+            riotAPI = RiotApi.GetDevelopmentInstance(apikey);
 
 
             //봇 실행
             await Client.LoginAsync(TokenType.Bot, token);
             await Client.StartAsync();
-       
-            await Client.SetGameAsync("LoLPlay 관리");
+
+            await Client.SetGameAsync("LoLPlay 관리");  
             while (true)
             {
                 var data = Console.ReadLine();

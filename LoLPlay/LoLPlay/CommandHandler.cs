@@ -34,14 +34,20 @@ public class CommandHandler
         if (message == null) return;
         int pos = 0;
 
+        var targetChannelObject = LoLPlay.LoLPlayManager.Instance.ChannelManager.GetChannel(messageParam.Channel.Id);
 
         //메시지 앞에 !이 달려있지 않고, 자신이 호출된게 아니거나 다른 봇이 호출했다면 취소
         if (!(message.HasCharPrefix('!', ref pos) ||
             message.HasMentionPrefix(client.CurrentUser, ref pos)) ||
                 message.Author.IsBot)
+        {
+            if (targetChannelObject != null && !message.Author.IsBot)
+            {
+                await targetChannelObject.OnReceivedMsg(message, message.Content, null); 
+            }
             return;
-
-        var targetChannelObject = LoLPlay.LoLPlayManager.Instance.ChannelManager.GetChannel(messageParam.Channel.Id);
+        }
+ 
 
         if(targetChannelObject != null)
         {
