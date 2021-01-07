@@ -23,13 +23,13 @@ namespace LoLPlay.Channels
         public async Task AutoChannelDelete()
         {
             //1분이후 인원이 0명인 서버인경우 삭제처리
-            System.Threading.Thread.Sleep(6000);
+            System.Threading.Thread.Sleep(60000);
 
             foreach (var guild in LoLPlayManager.Instance.Client.Guilds)
             {
                 foreach (var channel in guild.Channels)
                 {
-                    if (channel.Id == this.ID)
+                    if (channel.Id == this.ID && channel.Users.Count == 0)
                     {
                         await channel.DeleteAsync();
                     }

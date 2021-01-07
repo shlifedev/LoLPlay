@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Discord.Commands;
+using System.Threading;
+using Discord.Rest;
 
 namespace LoLPlay.Channels
 {
     public class PartyAdvertisingChannel : ChannelBase
     {
-
+ 
         public PartyAdvertisingChannel()
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationQuit);
         }
+         
 
         public override async Task OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
         {
@@ -29,7 +32,7 @@ namespace LoLPlay.Channels
             {
                 var invite = await joinedChannel.CreateInviteAsync();
                 var url = invite.Url;
-                var msg = await scc.Guild.GetTextChannel(ID).SendMessageAsync($"{command} {url} \n 해당메세지는 10분후 자동으로 삭제됩니다");
+                var msg = await scc.Guild.GetTextChannel(ID).SendMessageAsync($"{command} \n방장 : {message.Author.Mention} {url}"); 
             }
             else
             {
