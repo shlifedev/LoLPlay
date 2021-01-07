@@ -13,8 +13,13 @@ namespace LoLPlay.Channels
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnApplicationQuit);
             LoLPlayManager.Instance.Log(new Discord.LogMessage(Discord.LogSeverity.Debug, "PartyVoice", "파티 보이스 채널 생성됨"));
-            LoLPlayManager.Instance.Client.ChannelUpdated += ChannelUpdated;
+            LoLPlayManager.Instance.Client.ChannelDestroyed += ChannelDestroyed;
 
+        }
+
+        public async Task ChannelDestroyed(SocketChannel c)
+        {
+            
         }
         public async Task OnApplicationQuitAsync(object sender, EventArgs e)
         {
@@ -32,17 +37,7 @@ namespace LoLPlay.Channels
         }
         public void OnApplicationQuit(object sender, EventArgs e)
         {
-            OnApplicationQuitAsync(sender, e).Wait();
-        }
-
-
-        public async Task ChannelUpdated(SocketChannel before, SocketChannel after)
-        {
-            Console.WriteLine(before.Users.Count);
-        }
-        public override async Task OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
-        {
-
-        }
+            OnApplicationQuitAsync(sender, e).Wait(); 
+        } 
     }
 }

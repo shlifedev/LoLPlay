@@ -41,7 +41,7 @@ namespace LoLPlay
             //채널 매니저 초기화
             ChannelManager = new ChannelManager();
             ChannelManager.AddChannel(796524973744586753, new PartyCreateChannel());
-
+            ChannelManager.AddChannel(796533464983404624, new ServerStatusNotificationChannel());
 
             //토큰 불러오기
             var token = System.IO.File.ReadAllText("token.txt");
@@ -51,7 +51,7 @@ namespace LoLPlay
             await Client.LoginAsync(TokenType.Bot, token);
             await Client.StartAsync();
        
-            Client.SetGameAsync("LoLPlay 관리");
+            await Client.SetGameAsync("LoLPlay 관리");
             while (true)
             {
                 var data = Console.ReadLine();
@@ -62,10 +62,17 @@ namespace LoLPlay
             }
             await Task.Delay(-1);
         }
-
-        public Task Log(LogMessage msg)
+        public Task LogDebug(string src, string content)
         {
-            Console.WriteLine(msg.ToString()); 
+           return Log(new LogMessage(LogSeverity.Debug, src, content));
+        }
+        public Task LogError(string src, string content)
+        {
+            return Log(new LogMessage(LogSeverity.Error, src, content));
+        }
+        public Task Log(LogMessage msg)
+        { 
+            Console.WriteLine(msg.ToString());   
             return Task.CompletedTask;
         }
     }
