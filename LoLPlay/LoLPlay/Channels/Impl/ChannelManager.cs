@@ -8,6 +8,8 @@ namespace LoLPlay.Channels
     {
         public Dictionary<ulong, ChannelBase> channelMap = new Dictionary<ulong, ChannelBase>();
         public List<ChannelBase> channels = new List<ChannelBase>();
+
+        
         /// <summary>
         /// 채널 가져오기
         /// </summary>

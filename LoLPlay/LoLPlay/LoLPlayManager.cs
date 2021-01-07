@@ -26,6 +26,8 @@ namespace LoLPlay
         private CommandHandler _commandHandler;
         public ChannelManager ChannelManager;
 
+
+      
         public async Task Run()
         {
            
@@ -38,7 +40,7 @@ namespace LoLPlay
 
             //채널 매니저 초기화
             ChannelManager = new ChannelManager();
-            ChannelManager.AddChannel(796458488871387206, new PartyCreateChannel());
+            ChannelManager.AddChannel(796524973744586753, new PartyCreateChannel());
 
 
             //토큰 불러오기
