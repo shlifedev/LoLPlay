@@ -42,10 +42,10 @@ namespace LoLPlay
 
             //채널 매니저 초기화
             ChannelManager = new ChannelManager();
-            ChannelManager.AddChannel(796524973744586753, new PartyCreateChannel());
-            ChannelManager.AddChannel(796533464983404624, new ServerStatusNotificationChannel());
-            ChannelManager.AddChannel(796459008659685398, new PartyAdvertisingChannel());
-            ChannelManager.AddChannel(796554797930119199, new LoLTierVerifyChannel());
+            ChannelManager.AddChannel(GlobalConfig.PartyCreateChannelID, new PartyCreateChannel());
+            ChannelManager.AddChannel(GlobalConfig.ServerNotificationChannelID, new ServerStatusNotificationChannel());
+            ChannelManager.AddChannel(GlobalConfig.PartyAdvertisingChannelID, new PartyAdvertisingChannel());
+            ChannelManager.AddChannel(GlobalConfig.LoLTierVerifyChannelID, new LoLTierVerifyChannel());
 
             //토큰 불러오기
             var token = System.IO.File.ReadAllText("token.txt");

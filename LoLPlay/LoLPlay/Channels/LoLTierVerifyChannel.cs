@@ -12,100 +12,66 @@ namespace LoLPlay.Channels
 {
     public class LoLTierVerifyChannel : ChannelBase
     {
-         
+
+        public Dictionary<string, string> tierGroup = new Dictionary<string, string>()
+        {
+            { "bronze", "브론즈"},  { "silver", "실버"},  { "gold", "골드"},  { "platinum", "플레티넘"},  { "diamond", "다이아몬드" }, { "challenger", "첼린저" }, { "master", "마스터" }, { "grandmaster", "그랜드마스터"}
+        };
+        public List<string> tierList = new List<string>() { "브론즈", "실버", "골드", "플레티넘", "다이아몬드", "첼린저", "마스터", "그랜드마스터"};
         public LoLTierVerifyChannel()
-        {  
-              AddCommand("!티어인증");
+        {
+            AddCommand("!티어인증");
         }
-         
+
+       
+
         public override async Task OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
         {
-           if(command == "!티어인증")
+            if (command == "!티어인증")
             {
                 await message.DeleteAsync();
                 SocketCommandContext scc = new SocketCommandContext(LoLPlayManager.Instance.Client, message);
                 //generate nickname
                 string nickname = null;
-                foreach(var value in args) nickname += value;
-                 
-                var summoner = await LoLPlayManager.Instance.riotAPI.Summoner.GetSummonerByNameAsync(Region.Kr, nickname);
-                Console.WriteLine(summoner.Id);
-                var league = await LoLPlayManager.Instance.riotAPI.League.GetLeagueEntriesBySummonerAsync(Region.Kr, summoner.Id);
-                
-                foreach (var value in league)
-                { 
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "브론즈"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "브론즈")); 
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "실버"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "실버"));
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "골드"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "골드"));
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "플레티넘"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "플레티넘"));
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "다이아몬드"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "다이아몬드"));
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "마스터"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "마스터"));
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "그랜드마스터"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "그랜드마스터")); 
-                    if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == "첼린저"))
-                        await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == "첼린저"));
+                foreach (var value in args) nickname += value;
 
+                var summoner = await LoLPlayManager.Instance.riotAPI.Summoner.GetSummonerByNameAsync(Region.Kr, nickname);
+                var league = await LoLPlayManager.Instance.riotAPI.League.GetLeagueEntriesBySummonerAsync(Region.Kr, summoner.Id);
+
+                foreach (var value in league)
+                {
+                    if (value.QueueType == "RANKED_SOLO_5x5")
+                    { 
+                        //현재 달고있는 모든 티어 역할 삭제
+                        foreach (var tier in tierList)
+                        {
+                            if (scc.Guild.GetUser(message.Author.Id).Roles.Any(role => role.Name == tier))
+                            { 
+                                await scc.Guild.GetUser(message.Author.Id).RemoveRoleAsync(scc.Guild.Roles.FirstOrDefault(x => x.Name == tier));
+                            }
+                        }
+                    }
+                }
+
+                foreach (var value in league)
+                {
                     //솔랭
                     if (value.QueueType == "RANKED_SOLO_5x5")
                     {
-                        if (value.Tier.ToLower().Contains("bronze"))
+                        foreach (var tier in tierGroup)
                         {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "브론즈");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
+                            if (value.Tier.ToLower().Contains(tier.Key))
+                            {
+                                var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == tier.Value);
+                                await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
+                            }
                         }
-                        if (value.Tier.ToLower().Contains("silver"))
-                        {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "실버");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
-                        }
-                        if (value.Tier.ToLower().Contains("gold"))
-                        {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "골드");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
-                        }
-                        if (value.Tier.ToLower().Contains("platinum"))
-                        {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "플레티넘");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
-                        }
-                        if (value.Tier.ToLower().Contains("diamond"))
-                        {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "다이아몬드");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
-                        }
-                        if (value.Tier.ToLower().Contains("master"))
-                        {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "마스터");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
-                        }
-                        if (value.Tier.ToLower().Contains("grandmaster"))
-                        {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "그랜드마스터");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
-                        }
-                        if (value.Tier.ToLower().Contains("challenger"))
-                        {
-                            var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == "첼린저");
-                            await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
-
-                          
-                        }
-
-
-
-
                     }
                     //자랭
                     if (value.QueueType == "RANKED_FLEX_SR")
                     {
 
-                    } 
+                    }
                 }
 
             }
