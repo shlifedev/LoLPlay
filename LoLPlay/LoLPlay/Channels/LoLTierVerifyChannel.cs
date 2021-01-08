@@ -43,6 +43,7 @@ namespace LoLPlay.Channels
                 SocketCommandContext scc = new SocketCommandContext(LoLPlayManager.Instance.Client, message);
                 //generate nickname
                 string nickname = null;
+                bool isUnranked = true;
                 foreach (var value in args) nickname += value;
 
                 try
@@ -76,14 +77,17 @@ namespace LoLPlay.Channels
                                     var role = scc.Guild.Roles.FirstOrDefault(x => x.Name == tier.Value);
                                     await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(role);
                                     await scc.Channel.SendMessageAsync($"{message.Author.Mention}님이 {nickname} 닉네임 으로 {value.Tier} 티어를 인증했습니다.");
-                              
+                                    isUnranked = false;
                                     break; 
                                 }
                             }
                         } 
 
                     }
-
+                    if(isUnranked)
+                    {
+                        await scc.Channel.SendMessageAsync($"{message.Author.Mention}님이 {nickname} 닉네임 으로 언랭 티어를 인증했습니다.");
+                    }
                     await Discord.UserExtensions.SendMessageAsync(message.Author, "티어가 인증되었습니다. 언랭의 경우 '인증' 역할만 나타납니다."); 
                     var roleVerify = scc.Guild.Roles.FirstOrDefault(x => x.Name == "인증");
                     await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(roleVerify);

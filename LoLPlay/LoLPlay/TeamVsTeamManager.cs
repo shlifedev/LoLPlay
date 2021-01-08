@@ -39,9 +39,16 @@ namespace LoLPlay
 
         public async Task OnApplicationQuitAsync(object sender, EventArgs e)
         {
-            foreach(var value in createdTvTChannels)
+            try
             {
-                await value.DeleteAsync();
+                foreach (var value in createdTvTChannels)
+                {
+                    await value.DeleteAsync();
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
         public void OnApplicationQuit(object sender, EventArgs e)
@@ -58,14 +65,15 @@ namespace LoLPlay
             var voice1Team = GetBlueTeamName(channelName);
             var voice2Team = GetRedTeamName(channelName);
 
-            var createdChannelMainVoice = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(mainVoice, x => { x.UserLimit = 14; x.CategoryId = GlobalConfig.TeamVsChannelID; });
-            var createdChannelBlueTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice1Team, x => { x.UserLimit = 7; x.CategoryId = GlobalConfig.TeamVsChannelID; });
-            var createdChannelRedTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice2Team, x => { x.UserLimit = 7; x.CategoryId = GlobalConfig.TeamVsChannelID; });
+            var createdChannelMainVoice = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(mainVoice, x => { x.UserLimit = GlobalConfig.TeamPlayWaitRoomMaxPlayer; x.CategoryId = GlobalConfig.TeamVsChannelID; });
+            var createdChannelBlueTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice1Team, x => { x.UserLimit = GlobalConfig.TeamPlayGameRoomMaxPlayer; x.CategoryId = GlobalConfig.TeamVsChannelID; });
+            var createdChannelRedTeam = await LoLPlayManager.Instance.GetGuild().CreateVoiceChannelAsync(voice2Team, x => { x.UserLimit = GlobalConfig.TeamPlayGameRoomMaxPlayer; x.CategoryId = GlobalConfig.TeamVsChannelID; });
 
             //add
-            createdTvTChannels.Add(createdChannelRedTeam);
-            createdTvTChannels.Add(createdChannelBlueTeam);
             createdTvTChannels.Add(createdChannelMainVoice);
+            createdTvTChannels.Add(createdChannelBlueTeam);
+            createdTvTChannels.Add(createdChannelRedTeam);
+            
 
         }
         public async Task Initialize()

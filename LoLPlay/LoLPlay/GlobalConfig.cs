@@ -22,5 +22,10 @@ namespace LoLPlay
         public static ulong PartyCreateChannelID = 796524973744586753;
         public static ulong TeamVsChannelID = 796459617739472926;
 
+
+        /*내전 정보*/
+        public static int TeamPlayWaitRoomMaxPlayer = 20; //대기실 인원
+        public static int TeamPlayGameRoomMaxPlayer = 10; //게임 인원
+
     }
 }

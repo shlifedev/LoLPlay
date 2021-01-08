@@ -21,24 +21,30 @@ namespace LoLPlay.Channels
 
         public override async Task OnReceivedMsg(SocketUserMessage message, string command, List<string> args)
         {
-            //메세지삭제
-            await message.DeleteAsync(); 
-            var author = message.Author; 
-            SocketCommandContext scc = new SocketCommandContext(LoLPlayManager.Instance.Client, message); 
+            try
+            {
+                //메세지삭제
+                await message.DeleteAsync();
+                var author = message.Author;
+                SocketCommandContext scc = new SocketCommandContext(LoLPlayManager.Instance.Client, message);
 
-            //입장채널
-            var joinedChannel = scc.Guild.GetUser(author.Id).VoiceChannel; 
-            if(joinedChannel != null)
-            {
-                var invite = await joinedChannel.CreateInviteAsync();
-                var url = invite.Url;
-                var msg = await scc.Guild.GetTextChannel(ID).SendMessageAsync($"{command} \n방장 : {message.Author.Mention} {url}"); 
+                //입장채널
+                var joinedChannel = scc.Guild.GetUser(author.Id).VoiceChannel;
+                if (joinedChannel != null)
+                {
+                    var invite = await joinedChannel.CreateInviteAsync();
+                    var url = invite.Url;
+                    var msg = await scc.Guild.GetTextChannel(ID).SendMessageAsync($"{command} \n방장 : {message.Author.Mention} {url}");
+                }
+                else
+                {
+                    await Discord.UserExtensions.SendMessageAsync(message.Author, $"파티생성 채널에서 파티 생성후, 음성 채팅방에 입장한 상태에서만 파티를 홍보할 수 있습니다! \n `삭제된 메세지 : {command}`");
+                }
             }
-            else
+            catch(Exception e)
             {
-                await Discord.UserExtensions.SendMessageAsync(message.Author, $"파티생성 채널에서 파티 생성후, 음성 채팅방에 입장한 상태에서만 파티를 홍보할 수 있습니다! \n `삭제된 메세지 : {command}`"); 
+                Console.WriteLine(e.StackTrace);
             }
-       
 
             
         }

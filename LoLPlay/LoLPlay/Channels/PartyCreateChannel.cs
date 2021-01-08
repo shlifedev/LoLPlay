@@ -16,7 +16,7 @@ namespace LoLPlay.Channels
         /// <summary>
         /// 파티생성시 딜레이 있음
         /// </summary>
-        public bool usePartyCreateDelay = false;
+        public bool usePartyCreateDelay = true;
         
         /// <summary>
         /// 밀리세컨드 단위, 파티생성 딜레이
@@ -128,7 +128,9 @@ namespace LoLPlay.Channels
 
             LoLPlayManager.Instance.ChannelManager.AddChannel(voiceChannel.Id, new PartyVoiceChannel());
 
-            var msg = await scc.Guild.GetTextChannel(ID).SendMessageAsync($"{receivedData.Author.Mention} 님의 <{args[0]}> 파티가 생성되었어요! :warning:(1분안에 미입장시 채널삭제) \n바로입장:{invite.Url}  (해당 메세지는 1분후 삭제됩니다) \n 파티인원 모집은 파티홍보채널에서 해주세요!");
+            var channelMention = LoLPlayManager.Instance.Client.GetGuild(GlobalConfig.DiscordServerID).GetTextChannel(GlobalConfig.PartyAdvertisingChannelID).Mention;
+
+            var msg = await scc.Guild.GetTextChannel(ID).SendMessageAsync($"{receivedData.Author.Mention} 님의 [{args[0]}] 파티가 생성되었어요! \n바로입장:{invite.Url}  \n파티인원 모집은 {channelMention} 에서 해주세요!(해당 메세지는 3분후 삭제됩니다)");
             partyCreateMsgs.Add(msg);
 
             //60초후 메세지 삭제
@@ -136,7 +138,7 @@ namespace LoLPlay.Channels
             {
                 try
                 { 
-                    Thread.Sleep(60000);
+                    Thread.Sleep(60000 * 3);
                     var task = msg.DeleteAsync();
                     task.Wait();
                     partyCreateMsgs.Remove(msg); 
