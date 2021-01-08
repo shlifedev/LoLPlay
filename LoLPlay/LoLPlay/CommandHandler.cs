@@ -53,9 +53,9 @@ public class CommandHandler
         {
             var content = message.Content;
             var split = content.Split(' ');
-
+            Console.WriteLine(split.Length);
             //인자가 있는 명령어
-            if(split.Length != 0)
+            if(split.Length != 1 && split.Length != 0)
             {
                 var cmdExist = targetChannelObject.CommandExist(split[0]);
                 List<string> args = new List<string>(split);

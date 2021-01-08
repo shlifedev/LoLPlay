@@ -32,7 +32,8 @@ namespace LoLPlay.Channels
         /// UserVoiceStateUpdated 의 콜백이 동시호출 되는경우를 방지
         /// </summary>
         private HashSet<ulong> deletedVoiceChannels = new HashSet<ulong>();
-
+        
+        public List<RestVoiceChannel> CreatedVoiceChannels = new List<RestVoiceChannel>();
 
         /// <summary>
         /// 파티가 생성된경우 나타나는 메세지의 캐시
@@ -56,8 +57,10 @@ namespace LoLPlay.Channels
                 if (userCount == 0)
                 {
                     if (before.VoiceChannel != null)
-                    { 
-                        if (deletedVoiceChannels.Contains(before.VoiceChannel.Id) == false)
+                    {
+                        var restVoiceChannel = CreatedVoiceChannels.Find(x=>x.Id == before.VoiceChannel.Id);
+
+                        if (deletedVoiceChannels.Contains(before.VoiceChannel.Id) == false && restVoiceChannel != null)
                         {
                             try
                             {
@@ -96,10 +99,11 @@ namespace LoLPlay.Channels
         /// <param name="args"></param>
         public async Task CreatePartyVoiceChannel(SocketUserMessage receivedData, List<string> args)
         {
+            
             //기존메세지 삭제
-            await receivedData.DeleteAsync(); 
-
-            if(partyCreateDelay.ContainsKey(receivedData.Author.Id) && usePartyCreateDelay == true)
+            await receivedData.DeleteAsync();
+            if (args == null || args.Count == 0) return;
+            if (partyCreateDelay.ContainsKey(receivedData.Author.Id) && usePartyCreateDelay == true)
             {
                 await Discord.UserExtensions.SendMessageAsync(receivedData.Author, $"파티를 생성 한 후, 60초 후에 다시 시도할 수 있어요!");
                 return;
@@ -124,7 +128,8 @@ namespace LoLPlay.Channels
 
             //권한부여 
             await voiceChannel.AddPermissionOverwriteAsync(receivedData.Author, new Discord.OverwritePermissions(manageChannel: PermValue.Allow));
-            var invite = await voiceChannel.CreateInviteAsync(86400, 50);
+            CreatedVoiceChannels.Add(voiceChannel);
+             var invite = await voiceChannel.CreateInviteAsync(86400, 50);
 
             LoLPlayManager.Instance.ChannelManager.AddChannel(voiceChannel.Id, new PartyVoiceChannel());
 

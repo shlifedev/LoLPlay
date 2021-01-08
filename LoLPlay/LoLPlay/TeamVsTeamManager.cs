@@ -43,6 +43,7 @@ namespace LoLPlay
             {
                 foreach (var value in createdTvTChannels)
                 {
+                    await LoLPlayManager.Instance.LogDebug("TvT", $"{value.Name} 내전 채널 삭제됨.");
                     await value.DeleteAsync();
                 }
             }
@@ -53,6 +54,7 @@ namespace LoLPlay
         }
         public void OnApplicationQuit(object sender, EventArgs e)
         {
+     
             OnApplicationQuitAsync(sender, e).Wait();
         }
 
@@ -82,6 +84,11 @@ namespace LoLPlay
             foreach(var channel in TvTChannels) 
                 await AddChannel(channel); 
 
+
+            foreach(var value in createdTvTChannels)
+            {
+                await LoLPlayManager.Instance.LogDebug("TvT", $"{value.Name} 내전 채널 생성됨.");
+            }
         }
 
     }

@@ -79,10 +79,31 @@ namespace LoLPlay
             while (true)
             {
                 var data = Console.ReadLine();
-                if(data == "A")
+
+                var msg = data.Split(' ');
+                Console.WriteLine(msg.Length);
+                if (msg.Length == 1)
                 { 
-                   
+                    if (data == "help")
+                    {
+                        Console.WriteLine("quit : 서버종료");
+                    }
+                    if (data == "quit")
+                        System.Environment.Exit(0);
                 }
+                else if(msg.Length >= 2)
+                {
+                    if (msg[0] == "chat")
+                    {
+                        string sendMsg = "";
+                        int position = 0;
+                        for (int i = 2; i < msg.Length; i++)
+                            sendMsg += " " + msg[i]; 
+
+                        await GetGuild().GetTextChannel(ulong.Parse(msg[1])).SendMessageAsync(sendMsg);
+                    }
+                }
+               
             }
             await Task.Delay(-1);
         }
