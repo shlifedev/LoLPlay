@@ -47,6 +47,10 @@
             "Discord.Net": {
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "Google.Cloud.Firestore": {
+              "target": "Package",
+              "version": "[2.3.0, )"
             }
           },
           "imports": [

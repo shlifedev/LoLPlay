@@ -44,10 +44,12 @@ namespace LoLPlay
             await TeamVsTeamManager.Instance.Initialize();
         }
 
+
         public async Task Run()
         {
-           
-         
+
+            await DB.DBInit(); 
+         //   while(true);
             Client = new DiscordSocketClient();
             Client.Log += Log;
             Client.Ready += OnReady;

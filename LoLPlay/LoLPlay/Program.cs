@@ -10,6 +10,7 @@ namespace LoLPlay
 
         public static void Main(string[] args)
         {
+          
             LoLPlayManager.Instance.Run().GetAwaiter().GetResult();
         }
          
