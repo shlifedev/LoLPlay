@@ -45,7 +45,7 @@ namespace LoLPlay.Channels
                 string nickname = null;
                 bool isUnranked = true;
                 string _tier = "언랭";
-                foreach (var value in args) nickname += value;
+                foreach (var value in args) nickname += " " + value;
 
                 try
                 {
