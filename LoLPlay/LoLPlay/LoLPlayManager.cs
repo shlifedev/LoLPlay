@@ -63,6 +63,7 @@ namespace LoLPlay
             ChannelManager.AddChannel(GlobalConfig.ServerNotificationChannelID, new ServerStatusNotificationChannel());
             ChannelManager.AddChannel(GlobalConfig.PartyAdvertisingChannelID, new PartyAdvertisingChannel());
             ChannelManager.AddChannel(GlobalConfig.LoLTierVerifyChannelID, new LoLTierVerifyChannel());
+            ChannelManager.AddChannel(GlobalConfig.AdminCommandChannel, new AdminCommandChannel());
 
             //토큰 불러오기
             var token = System.IO.File.ReadAllText("token.txt");

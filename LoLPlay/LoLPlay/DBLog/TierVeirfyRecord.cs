@@ -8,8 +8,9 @@ namespace LoLPlay.DBLog
     [FirestoreData]
     public class TierVeirfyRecord
     {
- 
 
+        [FirestoreProperty]
+        public string DateTime { get; set; } 
         [FirestoreProperty]
         public ulong DiscordID { get;set;}
         [FirestoreProperty]
@@ -17,7 +18,7 @@ namespace LoLPlay.DBLog
         [FirestoreProperty]
         public string LOLNick { get; set; }
         [FirestoreProperty]
-        public string SoloTier { get; set; } 
-
+        public string SoloTier { get; set; }
+     
     }
 }

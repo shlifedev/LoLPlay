@@ -92,13 +92,12 @@ namespace LoLPlay.Channels
                     }
                     await Discord.UserExtensions.SendMessageAsync(message.Author, "티어가 인증되었습니다. 언랭의 경우 '인증' 역할만 나타납니다."); 
                     var roleVerify = scc.Guild.Roles.FirstOrDefault(x => x.Name == "인증");
-                    await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(roleVerify);
-
+                    await scc.Guild.GetUser(message.Author.Id).AddRoleAsync(roleVerify); 
                     await DB.RecordTierVerify(message.Author.Id, message.Author.Username, nickname, _tier);
                 }
                 catch (Exception e)
                 {
-                    await Discord.UserExtensions.SendMessageAsync(message.Author, "티어인증에 실패했습니다. 닉네임을 제대로 입력 했는지 확인하세요");
+                    await Discord.UserExtensions.SendMessageAsync(message.Author, $"티어인증에 실패했습니다. 닉네임을 제대로 입력 했는지 확인하세요");
                     Console.WriteLine(e);
                 }
 

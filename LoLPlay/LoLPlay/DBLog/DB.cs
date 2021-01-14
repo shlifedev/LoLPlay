@@ -26,17 +26,30 @@ namespace LoLPlay
                 DiscordID = discordID,
                 DiscordNick = discordName,
                 LOLNick = lolNick,
-                SoloTier = tier
+                SoloTier = tier,
+                DateTime = System.DateTime.Now.ToString()
             });;
+        }
+
+
+        public static async Task<List<DBLog.TierVeirfyRecord>> GetTierVerifyRecordAsync(ulong id)
+        {
+            var cols = db.Collection("tierVerify").Document(id.ToString()).Collection("records");
+            var snap = await cols.GetSnapshotAsync();
+            List<DBLog.TierVeirfyRecord> records = new List<DBLog.TierVeirfyRecord>();
+            foreach (var value in snap.Documents)
+            {
+                var data = value.ConvertTo<DBLog.TierVeirfyRecord>();
+                records.Add(data);
+            } 
+            return records;
         }
 
         public static async Task DBInit()
         {
             FirestoreDbBuilder builder = new FirestoreDbBuilder(){ CredentialsPath ="LoLPlay-6e4ac4a73f47.json", ProjectId = "lolplay-fba13"};
             db = builder.Build();
-            dbInitialized = true;
-
-            //db조회 테스트ㅋ
+            dbInitialized = true; 
             var cols = db.Collection("tierVerify").Document("229808086091563010").Collection("records");
             var snap = await cols.GetSnapshotAsync(); 
             foreach (var value in snap.Documents)
