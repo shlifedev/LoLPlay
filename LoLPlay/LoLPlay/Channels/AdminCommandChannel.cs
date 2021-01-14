@@ -14,7 +14,7 @@ namespace LoLPlay.Channels
             AddCommand("!경고");
             AppDomain.CurrentDomain.ProcessExit += OnApplicationQuit;
         }
-
+         
         public async Task InquiryLoLTier(ulong discordID)
         {
             var records = await DB.GetTierVerifyRecordAsync(discordID);
