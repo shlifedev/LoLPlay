@@ -10,7 +10,8 @@ namespace LoLPlay.Channels
     {
         public AdminCommandChannel()
         {
-            AddCommand("!티어조회");
+            AddCommand("!티어조회"); 
+            AddCommand("!경고");
             AppDomain.CurrentDomain.ProcessExit += OnApplicationQuit;
         }
 

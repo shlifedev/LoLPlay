@@ -14,7 +14,7 @@ namespace LoLPlay.Channels
     {
         public LoLTierVerifyChannel()
         {
-            AddCommand("!티어인증");
+            AddCommand("!티어인증"); 
             AppDomain.CurrentDomain.ProcessExit += OnApplicationQuit;
         }
 
